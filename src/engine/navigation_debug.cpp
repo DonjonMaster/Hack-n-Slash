@@ -33,4 +33,9 @@ void Navigator::Invalidate() {
     path = Path{};
     next = 0;
 }
+
+bool Navigator::Finished() const
+{
+    return next >= path.points.size();
+}
 }
