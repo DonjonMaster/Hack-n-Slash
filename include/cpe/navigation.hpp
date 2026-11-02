@@ -55,7 +55,7 @@ namespace cpe
     {
         int a, b;
         Vec2 p, q;
-        Vec2 Middle() { return (q + p) * 0.5; }
+        Vec2 Middle() const { return (q + p) * 0.5; }
     };
 
     struct Path
@@ -75,7 +75,7 @@ namespace cpe
         // Ne construit ni polygones de navigation, ni graphe, ni portails.
         void SetSourcePolygons(const std::vector<std::vector<Vec2>>& source);
         const std::vector<std::vector<Vec2>>& SourcePolygons() const { return source_; }
-
+        const Portal* Between(int a, int b)const ;
         // À réaliser dans src/student/navmesh.cpp.
         // Build doit remplir polygons_, portals_, graph_ et définir built_=true.
         void CreatePortals();

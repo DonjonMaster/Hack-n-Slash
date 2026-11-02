@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <ostream>
 #include <queue>
@@ -31,19 +32,26 @@ namespace cpe {
 
     SearchResult Search(const Graph& graph, int start, int goal, const std::vector<double>& heuristic) {
         SearchResult result;
+        using Clock = std::chrono::steady_clock;
+        const auto begin = Clock::now();
+        auto finish = [&]() {
+            result.microseconds =
+                std::chrono::duration<double, std::micro>(Clock::now() - begin).count();
+            return result;
+        };
         if (!ValidGraph(graph) || !ValidNode(graph, start) || !ValidNode(graph, goal) || heuristic.size() != graph.size())
         {
             result.status = Status::InvalidInput;
-            return result;
+            return finish();
         }
             
 
         //on vérifie que l'heuritic n'a pas de valeur négative
         for (auto h : heuristic)
         {
-            if (!std::isfinite(h) || h < 0.0) return result;
+            if (!std::isfinite(h) || h < 0.0) return finish();
         }
-        if (std::abs(heuristic[goal]) > 1e-9) return result;
+        if (std::abs(heuristic[goal]) > 1e-9) return finish();
 
         const double infinity = std::numeric_limits<double>::infinity();
         std::vector<double> g(graph.size(), infinity);
@@ -63,7 +71,7 @@ namespace cpe {
                 result.cost = g[goal];
                 for (int v = goal; v != -1; v = parent[v]) result.nodes.push_back(v);
                 std::reverse(result.nodes.begin(), result.nodes.end());
-                return result;
+                return finish();
             }
             ++result.expanded;
             for (const Edge& edge : graph[u]) {
@@ -76,7 +84,7 @@ namespace cpe {
             }
         }
         result.status = Status::NoPath;
-        return result;
+        return finish();
     }
     SearchResult Dijkstra(const Graph& graph, int start, int goal) {
         return Search(graph, start, goal, std::vector<double>(graph.size(), 0.0));
