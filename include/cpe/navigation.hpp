@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "math.hpp"
 #include <limits>
 #include <vector>
@@ -20,7 +21,11 @@ struct SearchResult {
     int expanded = 0;
     double microseconds = 0;
 };
-
+    using Heuristic = std::function<double(int)>;
+    bool ValidNode(const Graph& graph, int id);
+    bool ValidGraph(const Graph& graph);
+    std::vector<double> DefineGraphHeuristic(const Graph& graph , Heuristic heuristic);
+    SearchResult Search(const Graph& graph, int start, int goal, const std::vector<double>& heuristic);
 // À réaliser dans src/student/pathfinding.cpp.
 // Found : chemin départ -> arrivée et coût.
 // NoPath : graphe valide mais destination inaccessible.
