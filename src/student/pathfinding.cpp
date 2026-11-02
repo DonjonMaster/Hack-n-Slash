@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ostream>
 #include <queue>
 
 #include "cpe/navigation.hpp"
@@ -29,13 +31,17 @@ namespace cpe {
 
     SearchResult Search(const Graph& graph, int start, int goal, const std::vector<double>& heuristic) {
         SearchResult result;
-        if (!ValidGraph(graph) || !ValidNode(graph, start) ||
-            !ValidNode(graph, goal) || heuristic.size() != graph.size()) return result;
+        if (!ValidGraph(graph) || !ValidNode(graph, start) || !ValidNode(graph, goal) || heuristic.size() != graph.size())
+        {
+            result.status = Status::InvalidInput;
+            return result;
+        }
+            
 
         //on vérifie que l'heuritic n'a pas de valeur négative
         for (auto h : heuristic)
         {
-            if (std::isfinite(h) || h < 0.0) return result;
+            if (!std::isfinite(h) || h < 0.0) return result;
         }
         if (std::abs(heuristic[goal]) > 1e-9) return result;
 
