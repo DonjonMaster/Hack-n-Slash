@@ -11,7 +11,7 @@ void Navigator::Plan(const Level& level, Vec2 position,
     
     if (!changed && !retry && !stoppedFar) return;
     
-    //path = FindNavPath(level.navmesh, position, target);
+    path = level.navmesh.FindPath(position, target, Algorithm::Dijkstra);
     next = path.points.size() > 1 ? 1 : path.points.size();
     
     lastTarget = target;
