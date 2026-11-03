@@ -46,7 +46,7 @@ namespace cpe
     {
         for (auto &portal : portals_)
         {
-            if (portal.a == a && portal.b == b)
+            if ((portal.a == a && portal.b == b) || (portal.a == b && portal.b == a) )
                 return &portal;
         }
         return nullptr;
@@ -252,7 +252,7 @@ namespace cpe
 
 
     Path pathResult = { .search = searchResult };
-    if (!(searchResult.status == Status::Found))
+    if (searchResult.status != Status::Found)
     {
         return pathResult;
     }
