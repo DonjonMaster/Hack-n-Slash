@@ -241,7 +241,7 @@ namespace cpe
     if (algorithm == Algorithm::AStar)
     {
         std::vector<double> heuristic = DefineGraphHeuristic(graph_, [&](int n)->double {
-        double dx = n % graph_.size() - goalRegion % graph_.size();
+        double dx = n - goalRegion;
         double dy = n / graph_.size() - goalRegion / graph_.size();
         return sqrt(dx * dx + dy * dy);
         });
