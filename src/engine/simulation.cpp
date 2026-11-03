@@ -41,6 +41,7 @@ void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
     }
 
     UpdateGameplay(actionPressed, dt);
-    for (auto& enemy : enemies) UpdateEnemy(enemy, dt);
+    for (auto& enemy : enemies) 
+        UpdateEnemy(enemy, dt);
 }
 }

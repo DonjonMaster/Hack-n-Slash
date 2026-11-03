@@ -43,7 +43,8 @@ Vec2 Navigator::Follow(const Level& level, Vec2 position, double speed, double d
         else
         {
             Vec2 displacement = position + delta * (budget / distance);
-            position = level.MoveSliding(position, displacement, level.agentRadius);
+            position = displacement;
+            //position = level.MoveSliding(position, displacement, level.agentRadius);
             budget = 0;
         }
     }
