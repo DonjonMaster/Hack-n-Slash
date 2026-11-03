@@ -36,7 +36,8 @@ Vec2 Navigator::Follow(const Level& level, Vec2 position, double speed, double d
         if (distance <= budget)
         {
             Vec2 displacement = path.points[next++];
-            position = level.MoveSliding(position, displacement, level.agentRadius);
+            position = displacement;
+            //position = level.MoveSliding(position, displacement, level.agentRadius);
             budget -= distance;
         }
         // Else, go in the direction of the next point
