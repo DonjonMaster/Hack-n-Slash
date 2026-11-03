@@ -3,7 +3,7 @@
 #include <cstddef>
 
 namespace cpe {
-struct Player { Vec2 position; Vec2 facing{0,-1}; };
+struct Player { Vec2 position; Vec2 facing{0,-1}; int hp=2000;};
 
 // Ce composant expose les données au debug ; le suivi est à implémenter.
 struct Navigator {
@@ -26,10 +26,15 @@ const char* Name(State value);
 // Entités de démonstration immobiles ; aucun comportement n'est fourni.
 // Ajoutez ici les données nécessaires à votre propre IA et votre combat.
 struct Enemy {
+    int hp = 20;
+    int damage = 1;
+    float speed = 2.0;
+    double detectRange = 2.0, loseRange=10.0, attackRange=0.65;
+    double windupDuration=0.5, recoverDuration=0.8;
     Vec2 position;
     EnemyKind kind = EnemyKind::Light;
     State state = State::Waiting;
-    Navigator navigator;
+    Navigator navigator;    
 };
 class Simulation {
 public:
