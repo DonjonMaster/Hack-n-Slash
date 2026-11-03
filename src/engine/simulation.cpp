@@ -13,6 +13,7 @@ void Simulation::Reset() {
         Enemy enemy;
         enemy.position = spawn.position;
         enemy.kind = spawn.kind;
+        enemy.patrol = spawn.patrol;
         enemies.push_back(enemy);
     }
 }

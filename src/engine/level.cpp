@@ -54,7 +54,13 @@ namespace cpe
             {
                 std::string kind;
                 Spawn spawn;
-                if (!(in >> kind >> spawn.position.x >> spawn.position.z))error("enemy light|heavy x z");
+                int count = 0;
+                if (!(in >> kind >> spawn.position.x >> spawn.position.z >> count))error("enemy light|heavy x z");
+                
+                std::vector<Vec2> v(static_cast<std::size_t>(count));
+                for (auto& p : v) if (!(in >> p.x >> p.z))error("missing patrol coordinates");
+                spawn.patrol = v;
+                
                 if (kind != "light" && kind != "heavy")error("unknown enemy kind");
                 spawn.kind = kind == "light" ? EnemyKind::Light : EnemyKind::Heavy;
                 result.spawns.push_back(spawn);
@@ -76,6 +82,7 @@ namespace cpe
                 std::vector<Vec2> v(static_cast<std::size_t>(count));
                 for (auto& p : v)if (!(in >> p.x >> p.z))error("missing polygon coordinate");
                 polygons.push_back(v);
+                
             }
             else error("unknown key " + key);
             std::string extra;

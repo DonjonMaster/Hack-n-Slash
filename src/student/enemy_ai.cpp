@@ -18,7 +18,7 @@ void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
     enemy.navigator.requestCooldown = std::max(0.0, enemy.navigator.requestCooldown-dt);
     
     const double distance = Distance(enemy.position, player.position);
-    if (player.hp <= 0 || distance > enemy.loseRange)
+    if (enemy.state != State::Idle && (player.hp <= 0 || distance > enemy.loseRange))
     {
         enemy.state = State::Idle;
         enemy.navigator.Invalidate();
@@ -31,6 +31,16 @@ void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
     case State::Idle:
         if (distance <= enemy.detectRange)
             enemy.state = State::Chase;
+        else
+        {
+            if (enemy.patrol.size() > 0)
+            {
+                enemy.navigator.Plan(level, enemy.position, enemy.patrol[enemy.nextPatrolPoint], algorithm);
+                enemy.position = enemy.navigator.Follow(level, enemy.position, enemy.speed, dt);
+                if (enemy.navigator.Finished())
+                    enemy.nextPatrolPoint =  (enemy.nextPatrolPoint + 1) % enemy.patrol.size();
+            }
+        }
         break;
     case State::Chase:
         if (distance <= enemy.attackRange && level.navmesh.SegmentInside(enemy.position, player.position))

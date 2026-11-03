@@ -32,6 +32,8 @@ struct Enemy {
     double detectRange = 2.0, loseRange=10.0, attackRange=0.65;
     double windupDuration=0.5, recoverDuration=0.8;
     Vec2 position;
+    std::vector<Vec2> patrol;
+    int nextPatrolPoint = 0;
     EnemyKind kind = EnemyKind::Light;
     State state = State::Waiting;
     Navigator navigator;    
