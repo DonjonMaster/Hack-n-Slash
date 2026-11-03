@@ -16,6 +16,7 @@ void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
     
     elapsed = std::max(0.0, elapsed-dt);
     enemy.navigator.requestCooldown = std::max(0.0, enemy.navigator.requestCooldown-dt);
+    enemy.flashingCooldown = std::max(0.0, enemy.flashingCooldown-dt);
     
     const double distance = Distance(enemy.position, player.position);
     if (enemy.state != State::Idle && (player.hp <= 0 || distance > enemy.loseRange))
@@ -47,6 +48,8 @@ void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
         {
             enemy.state = State::Windup;
             elapsed = enemy.windupDuration;
+            enemy.flashing = true;
+            enemy.flashingCooldown = enemy.flashingCooldownMax;
         }
         else
         {
@@ -61,6 +64,16 @@ void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
                 player.hp = std::max(0, player.hp - enemy.damage);
             enemy.state = State::Recover;
             elapsed = enemy.recoverDuration;
+            enemy.flashingCooldown = enemy.flashingCooldownMax;
+            enemy.flashing = false;
+        }
+        else
+        {
+            if (enemy.flashingCooldown <= 0)
+            {
+                enemy.flashing = !enemy.flashing;
+                enemy.flashingCooldown = enemy.flashingCooldownMax;
+            }
         }
         break;
     case State::Recover:

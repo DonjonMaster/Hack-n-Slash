@@ -215,8 +215,20 @@ int main(int argc, char** argv)
             {
                 const auto& e = sim->enemies[i];
                 bool heavy = e.kind == cpe::EnemyKind::Heavy;
+                Color enemyColor;
+                if (e.state == cpe::State::Windup && e.flashing)
+                {
+                    enemyColor = WHITE;
+                }
+                else
+                {
+                    if (heavy)
+                        enemyColor = MAROON;
+                    else
+                        enemyColor = RED;
+                }
                 DrawCylinder(World(e.position, 0), radius, radius, heavy ? .85f : .58f, heavy ? 6 : 10,
-                             heavy ? MAROON : RED);
+                             enemyColor);
                 if (i == selected) DrawCircle3D(World(e.position, .08f), radius + .15f, {1, 0, 0}, 90,YELLOW);
                 if (showPaths && i == selected) DrawPath(e.navigator.path,MAGENTA);
             }
