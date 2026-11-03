@@ -7,10 +7,16 @@ struct Player { Vec2 position; Vec2 facing{0,-1}; };
 
 // Ce composant expose les données au debug ; le suivi est à implémenter.
 struct Navigator {
+    double speed = 2.0;
     Path path;
     std::size_t next = 0;
+    double requestCooldown = 0.0;
+    Vec2 lastTarget;
+    bool hasTarget = false;
     std::size_t requests = 0;
+    
     void Invalidate();
+    bool Finished() const;
     void Plan(const Level& level, Vec2 position, Vec2 target, Algorithm algorithm);
     Vec2 Follow(const Level& level, Vec2 position, double speed, double dt);
 };
