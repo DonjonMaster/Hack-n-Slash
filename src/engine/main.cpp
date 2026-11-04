@@ -9,6 +9,8 @@
 namespace fs = std::filesystem;
 using cpe::Vec2;
 
+
+
 static Vector3 World(Vec2 p, float y = .04f)
 {
     return {static_cast<float>(p.x), y, static_cast<float>(p.z)};
@@ -60,15 +62,7 @@ static fs::path FindData(const char* executable, const fs::path& overrideDir)
     throw std::runtime_error("Cannot find data/. Use --data PATH.");
 }
 
-static bool MouseGround(Camera3D camera, Vec2& result)
-{
-    Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
-    if (std::abs(ray.direction.y) < 1e-6f) return false;
-    float t = -ray.position.y / ray.direction.y;
-    if (t < 0) return false;
-    result = {ray.position.x + ray.direction.x * t, ray.position.z + ray.direction.z * t};
-    return true;
-}
+
 
 int main(int argc, char** argv)
 {
@@ -107,7 +101,7 @@ int main(int argc, char** argv)
         camera.up = {0, 1, 0};
         camera.fovy = 20;
         camera.projection = CAMERA_ORTHOGRAPHIC;
-
+        sim->camera = &camera;
         while (!WindowShouldClose())
         {
             double frame = std::min(static_cast<double>(GetFrameTime()), .1);
@@ -136,6 +130,7 @@ int main(int argc, char** argv)
                     cpe::Level::Load(data / "levels" / (nextScene ? "pillars.level" : "arena.level")));
                 next->SetAlgorithm(sim->algorithm);
                 sim = std::move(next);
+                sim->camera = &camera;
                 scene = nextScene;
                 selected = 0;
                 hasProbe = false;
@@ -150,7 +145,7 @@ int main(int argc, char** argv)
                         sim->player.position, probeGoal, sim->algorithm);
             }
             Vec2 mouse;
-            if (GetMouseY() > 155 && MouseGround(camera, mouse))
+            if (GetMouseY() > 155 && cpe::Simulation::MouseGround(camera, mouse))
             {
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
                 {
@@ -247,6 +242,17 @@ int main(int argc, char** argv)
                 
                 if (i == selected) DrawCircle3D(World(e.position, .08f), radius + .15f, {1, 0, 0}, 90,YELLOW);
                 if (showPaths && i == selected) DrawPath(e.navigator.path,MAGENTA);
+            }
+            for (auto& drone : sim->drones)
+            {
+                Color droneColor;
+                switch (drone.state)
+                {
+                    default: droneColor = SKYBLUE; break;
+                    case cpe::DroneState::Exploded: droneColor = BLACK; break;
+                    case cpe::DroneState::Exploding: droneColor = RED; break;
+                }
+                DrawCube(World(drone.position, .08f), 0.25,0.25,0.25,droneColor);
             }
             if (hasProbe)
             {
