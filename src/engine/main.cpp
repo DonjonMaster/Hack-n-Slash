@@ -60,15 +60,7 @@ static fs::path FindData(const char* executable, const fs::path& overrideDir)
     throw std::runtime_error("Cannot find data/. Use --data PATH.");
 }
 
-static bool MouseGround(Camera3D camera, Vec2& result)
-{
-    Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
-    if (std::abs(ray.direction.y) < 1e-6f) return false;
-    float t = -ray.position.y / ray.direction.y;
-    if (t < 0) return false;
-    result = {ray.position.x + ray.direction.x * t, ray.position.z + ray.direction.z * t};
-    return true;
-}
+
 
 int main(int argc, char** argv)
 {
@@ -107,7 +99,7 @@ int main(int argc, char** argv)
         camera.up = {0, 1, 0};
         camera.fovy = 20;
         camera.projection = CAMERA_ORTHOGRAPHIC;
-
+        sim->camera = &camera;
         while (!WindowShouldClose())
         {
             double frame = std::min(static_cast<double>(GetFrameTime()), .1);
