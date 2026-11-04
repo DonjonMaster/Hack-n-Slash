@@ -53,6 +53,14 @@ struct Navigator {
         double explosionRadius = 0.50;
     };
     
+    class Projectile
+    {
+    public:
+        float speed = 2.0f;
+        Vec2 position;
+        Vec2 direction;
+    };
+    
     
 enum class State { Waiting, Idle, Chase, Windup, Recover, Dead };
 const char* Name(State value);
@@ -69,6 +77,7 @@ public:
     int nextPatrolPoint = 0;
     EnemyKind kind = EnemyKind::Light;
     State state = State::Waiting;
+    Projectile UseBow(Vec2 target);
 };
 class Simulation {
 public:
@@ -77,6 +86,7 @@ public:
     Player player;
     std::vector<Enemy> enemies;
     std::vector<Drone> drones;
+    std::vector<Projectile> projectiles;
     Algorithm algorithm = Algorithm::AStar;
     double elapsed = 0;
     Camera3D* camera;
@@ -95,6 +105,7 @@ private:
     // À réaliser dans src/student/enemy_ai.cpp et gameplay.cpp.
     void UpdateEnemy(Enemy& enemy, double dt);
     void UpdateDrone(Drone& drone, double dt);
+    void UpdateProjectiles(Projectile& projectile, double dt);
     void UpdateGameplay(bool actionPressed, double dt);
 };
 }

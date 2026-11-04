@@ -51,6 +51,7 @@ void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
     for (auto& enemy : enemies) 
         UpdateEnemy(enemy, dt);
     for (auto& drone : drones) UpdateDrone(drone, dt);
+    for (auto& projectile : projectiles) UpdateProjectiles(projectile, dt);
 }
 
 void Simulation::SetLightEnemy(Enemy& enemy)

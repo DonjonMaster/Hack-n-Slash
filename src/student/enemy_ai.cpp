@@ -1,6 +1,29 @@
 #include "cpe/simulation.hpp"
 namespace cpe {
-void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
+    
+    void Simulation::UpdateProjectiles(Projectile& projectile, double dt)
+    {
+        projectile.position = projectile.position + (projectile.direction * (projectile.speed * dt));
+
+        for (auto it = projectiles.begin(); it != projectiles.end();)
+        {
+            if (level.navmesh.Locate(projectile.position) == -1)
+                it = projectiles.erase(it);
+            else
+                ++it;
+        }
+    }
+    
+    Projectile Enemy::UseBow(Vec2 target)
+    {
+        Projectile projectile;
+        auto distance = Distance(target, position);
+        projectile.direction = (target - position) * (1/distance);
+        projectile.position = position;
+        return projectile;
+    }
+
+    void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
     // Perception, transitions, décisions et appel du Navigator.
     
     if (enemy.state == State::Dead)return;
@@ -61,7 +84,12 @@ void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
         if (elapsed <= 0)
         {
             if (distance <= enemy.attackRange && level.navmesh.SegmentInside(enemy.position, player.position))
-                player.hp = std::max(0, player.hp - enemy.damage);
+            {
+                if (enemy.kind == EnemyKind::Archer)
+                    projectiles.push_back(enemy.UseBow(player.position));
+                else
+                    player.hp = std::max(0, player.hp - enemy.damage);
+            }
             enemy.state = State::Recover;
             elapsed = enemy.recoverDuration;
             enemy.flashingCooldown = enemy.flashingCooldownMax;

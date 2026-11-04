@@ -9,6 +9,7 @@ namespace cpe {
         result = {ray.position.x + ray.direction.x * t, ray.position.z + ray.direction.z * t};
         return true;
     }
+    
     void Simulation::UpdateGameplay(bool actionPressed, double dt) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
