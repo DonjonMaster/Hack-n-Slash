@@ -50,7 +50,7 @@ struct Navigator {
         DroneState state = DroneState::Moving;
         Vec2 target;
         double movingDuration = 2.0, explosionDuration = 2.0;
-        double explosionRadius = 0.50;
+        double explosionRadius = 1.50;
     };
     
     
