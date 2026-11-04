@@ -50,6 +50,9 @@ public:
 
     // Fourni : déplacement, collisions, boucle et appels des points d'extension.
     void Update(Vec2 movement, bool actionPressed, double dt);
+    void SetLightEnemy(Enemy& enemy);
+    void SetHeavyEnemy(Enemy& enemy);
+    void SetArcherEnemy(Enemy& enemy);
     void Reset();
     void SetAlgorithm(Algorithm value);
     std::size_t RequestCount() const;
