@@ -9,17 +9,22 @@ namespace cpe {
         result = {ray.position.x + ray.direction.x * t, ray.position.z + ray.direction.z * t};
         return true;
     }
-void Simulation::UpdateGameplay(bool actionPressed, double dt) {
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-    {
-        MouseGround(*camera, player.target);
+    void Simulation::UpdateGameplay(bool actionPressed, double dt) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            MouseGround(*camera, player.target);
+        }
+        player.attackCooldown = std::max(0.0, player.attackCooldown - dt);
+        if (actionPressed)
+        {
+            if (player.attackCooldown == 0)
+            {
+                Drone drone;
+                drone.position = player.position;
+                drone.target = player.target;
+                drones.push_back(drone);
+                player.attackCooldown = player.attackCooldownMax;
+            }
+        }
     }
-    if (actionPressed)
-    {
-        Drone drone;
-        drone.position = player.position;
-        drone.target = player.target;
-        drones.push_back(drone);
-    }
-}
 }

@@ -252,7 +252,12 @@ int main(int argc, char** argv)
                     case cpe::DroneState::Exploded: droneColor = BLACK; break;
                     case cpe::DroneState::Exploding: droneColor = RED; break;
                 }
-                DrawCube(World(drone.position, .08f), 0.25,0.25,0.25,droneColor);
+                DrawCube(World(drone.position, .0f), 0.25,0.25,0.25,droneColor);
+                
+                if (drone.state == cpe::DroneState::Exploding)
+                {
+                    DrawCircle3D(World(drone.position, .08f),drone.explosionRadius,{1, 0, 0}, 90,RED);
+                }
             }
             if (hasProbe)
             {
