@@ -61,8 +61,13 @@ namespace cpe
                 for (auto& p : v) if (!(in >> p.x >> p.z))error("missing patrol coordinates");
                 spawn.patrol = v;
                 
-                if (kind != "light" && kind != "heavy")error("unknown enemy kind");
-                spawn.kind = kind == "light" ? EnemyKind::Light : EnemyKind::Heavy;
+                if (kind != "light" && kind != "heavy" && kind != "archer")error("unknown enemy kind");
+                if (kind == "light")
+                    spawn.kind = EnemyKind::Light;
+                else if (kind == "heavy")
+                    spawn.kind = EnemyKind::Heavy;
+                else if (kind == "archer")
+                    spawn.kind = EnemyKind::Archer;
                 result.spawns.push_back(spawn);
             }
             else if (key == "wall")

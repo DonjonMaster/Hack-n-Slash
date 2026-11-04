@@ -72,7 +72,7 @@ void Simulation::SetHeavyEnemy(Enemy& enemy)
     enemy.speed = 1.5f;
     enemy.attackRange = 1.5f;
     enemy.windupDuration = 2.25f;
-    enemy.recoverDuration = 1.125f;
+    enemy.recoverDuration = 1.5f;
     
     enemy.detectRange = 3.0f;
     enemy.loseRange = 5.0f;
@@ -84,8 +84,8 @@ void Simulation::SetArcherEnemy(Enemy& enemy)
     enemy.damage = 5;
     enemy.speed = 2.0f;
     enemy.attackRange = 5.0f;
-    enemy.windupDuration = 1.0f;
-    enemy.recoverDuration = 0.5f;
+    enemy.windupDuration = 1.5f;
+    enemy.recoverDuration = 1.5f;
     
     enemy.detectRange = 8.0f;
     enemy.loseRange = 10.0f;

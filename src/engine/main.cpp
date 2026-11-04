@@ -214,21 +214,37 @@ int main(int argc, char** argv)
             for (int i = 0; i < static_cast<int>(sim->enemies.size()); ++i)
             {
                 const auto& e = sim->enemies[i];
-                bool heavy = e.kind == cpe::EnemyKind::Heavy;
+                
                 Color enemyColor;
+                float height = 0.58f;
+                int sides = 10;
                 if (e.state == cpe::State::Windup && e.flashing)
                 {
                     enemyColor = WHITE;
                 }
                 else
                 {
-                    if (heavy)
+                    if (e.kind == cpe::EnemyKind::Heavy)
+                    {
                         enemyColor = MAROON;
-                    else
+                        height = 0.85f;
+                        sides = 6;
+                    }
+                    else if (e.kind == cpe::EnemyKind::Light)
+                    {
                         enemyColor = RED;
+                        height = 0.58f;
+                        sides = 10;
+                    }
+                    else if (e.kind == cpe::EnemyKind::Archer)
+                    {
+                        enemyColor = ORANGE;
+                        height = 0.50f;
+                        sides = 10;
+                    }
                 }
-                DrawCylinder(World(e.position, 0), radius, radius, heavy ? .85f : .58f, heavy ? 6 : 10,
-                             enemyColor);
+                DrawCylinder(World(e.position, 0), radius, radius, height, sides, enemyColor);
+                
                 if (i == selected) DrawCircle3D(World(e.position, .08f), radius + .15f, {1, 0, 0}, 90,YELLOW);
                 if (showPaths && i == selected) DrawPath(e.navigator.path,MAGENTA);
             }

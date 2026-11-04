@@ -5,7 +5,7 @@ radius 0.25
 player -6 0
 enemy light -6 -4 0
 enemy heavy 0 4 0
-enemy light 6 0 0
+enemy archer 6 0 0
 wall -4.6 -1.2 -3.4 1.2 1.5
 wall -0.6 -1.2 0.6 1.2 1.8
 wall 3.4 -1.2 4.6 1.2 1.5
