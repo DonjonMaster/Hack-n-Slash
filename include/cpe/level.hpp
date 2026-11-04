@@ -4,7 +4,7 @@
 #include <string>
 
 namespace cpe {
-enum class EnemyKind { Light,Heavy };
+enum class EnemyKind { Light,Heavy,Archer };
 
 struct Spawn
 {
