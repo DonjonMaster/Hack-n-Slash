@@ -5,6 +5,8 @@
 
 
 namespace cpe {
+    
+   
     struct Player
     {
         Vec2 position;
@@ -30,18 +32,25 @@ struct Navigator {
     void Plan(const Level& level, Vec2 position, Vec2 target, Algorithm algorithm);
     Vec2 Follow(const Level& level, Vec2 position, double speed, double dt);
 };
+    template<typename StateType>
+    class Agent
+    {
+    public:
+        Vec2 position;
+        float speed = 2.0;
+        int damage = 2;
+        Navigator navigator;
+        StateType state;
+    };
     
     enum class DroneState { Moving, Exploding, Exploded };
-    struct Drone
+    class Drone : public Agent<DroneState>
     {
+    public:
         DroneState state = DroneState::Moving;
-        Vec2 position;
         Vec2 target;
-        Navigator navigator;
         double movingDuration = 2.0, explosionDuration = 2.0;
         double explosionRadius = 0.50;
-        int damage = 2;
-        double speed = 2.0;
     };
     
     
@@ -50,19 +59,16 @@ const char* Name(State value);
 
 // Entités de démonstration immobiles ; aucun comportement n'est fourni.
 // Ajoutez ici les données nécessaires à votre propre IA et votre combat.
-struct Enemy {
+class Enemy : public Agent<State> {
+public:
     int hp = 20;
-    int damage = 1;
-    float speed = 2.0;
     bool flashing = false;
     double detectRange = 2.0, loseRange=10.0, attackRange=0.65;
-    double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25f, flashingCooldownMax = 0.25f;;
-    Vec2 position;
+    double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25f, flashingCooldownMax = 0.25f;
     std::vector<Vec2> patrol;
     int nextPatrolPoint = 0;
     EnemyKind kind = EnemyKind::Light;
     State state = State::Waiting;
-    Navigator navigator;    
 };
 class Simulation {
 public:
