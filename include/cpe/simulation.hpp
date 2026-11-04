@@ -3,15 +3,7 @@
 #include <cstddef>
 #include <raylib.h>
 
-static bool MouseGround(Camera3D camera, cpe::Vec2& result)
-{
-    Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
-    if (std::abs(ray.direction.y) < 1e-6f) return false;
-    float t = -ray.position.y / ray.direction.y;
-    if (t < 0) return false;
-    result = {ray.position.x + ray.direction.x * t, ray.position.z + ray.direction.z * t};
-    return true;
-}
+
 namespace cpe {
     struct Player
     {
@@ -87,6 +79,7 @@ public:
     void Reset();
     void SetAlgorithm(Algorithm value);
     std::size_t RequestCount() const;
+    static bool MouseGround(Camera3D camera, cpe::Vec2& result);
 
 private:
     // À réaliser dans src/student/enemy_ai.cpp et gameplay.cpp.
