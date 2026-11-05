@@ -37,7 +37,7 @@ struct Navigator {
         Vec2 position;
         Vec2 target;
         Navigator navigator;
-        double movingDuration = 2.0, explosionDuration = 2.0;
+        double movingDuration = 2.0, explosionDuration = 2.0, deathDuration = 2.0;
         double explosionRadius = 0.50;
         int damage = 2;
         double speed = 2.0;

@@ -45,5 +45,9 @@ void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
     for (auto& enemy : enemies) 
         UpdateEnemy(enemy, dt);
     for (auto& drone : drones) UpdateDrone(drone, dt);
+    
+    auto it = std::find_if(drones.begin(), drones.end(), [](Drone& drone){return drone.deathDuration == 0;});
+    if (it != drones.end())
+        drones.erase(it);
 }
 }
