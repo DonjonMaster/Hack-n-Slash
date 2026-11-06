@@ -3,6 +3,8 @@ title Arene - contournement
 bounds -8 -6 8 6
 radius 0.25
 player -5 0
+wave 2 heavy 1 light 2
+wave 1 archer 1
 enemy light -5 -4 2 -4 -4 -4 -2
 enemy heavy -5 4 0
 enemy light 5 0 0

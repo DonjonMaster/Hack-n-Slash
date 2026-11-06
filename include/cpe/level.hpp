@@ -20,6 +20,7 @@ struct Level {
     Box bounds;
     Vec2 playerSpawn;
     std::vector<Spawn> spawns;
+    std::vector<std::vector<Spawn>> waveSpawn;
     std::vector<Wall> walls;
     NavMesh navmesh;
     static Level Load(const std::filesystem::path& file);

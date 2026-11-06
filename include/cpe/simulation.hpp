@@ -6,7 +6,6 @@
 
 namespace cpe {
     
-   
     struct Player
     {
         Vec2 position;
@@ -38,7 +37,7 @@ struct Navigator {
     public:
         Vec2 position;
         float speed = 2.0;
-        int damage = 2;
+        int damage = 60;
         Navigator navigator;
         StateType state;
     };
@@ -73,13 +72,23 @@ public:
     int hp = 20;
     bool flashing = false;
     double detectRange = 2.0, loseRange=10.0, attackRange=0.65;
-    double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25f, flashingCooldownMax = 0.25f;
+    double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25f, flashingCooldownMax = 0.25f, deathDuration = 2.0;
     std::vector<Vec2> patrol;
     int nextPatrolPoint = 0;
     EnemyKind kind = EnemyKind::Light;
     State state = State::Waiting;
     Projectile UseBow(Vec2 target);
 };
+    
+    class Wave
+    {
+    public:
+        Wave(std::vector<Enemy>* enemies);
+        std::vector<std::vector<Enemy>>waves;
+        std::vector<Enemy>* currentEnemies = nullptr;
+        int currentWave = 0;
+        void Update(double dt);
+    };
 class Simulation {
 public:
     explicit Simulation(Level level);
@@ -91,6 +100,7 @@ public:
     Algorithm algorithm = Algorithm::AStar;
     double elapsed = 0;
     Camera3D* camera;
+    Wave wave;
 
     // Fourni : déplacement, collisions, boucle et appels des points d'extension.
     void Update(Vec2 movement, bool actionPressed, double dt);

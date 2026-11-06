@@ -35,15 +35,13 @@ namespace cpe {
     void Simulation::UpdateEnemy(Enemy& enemy, double dt) {
     // Perception, transitions, décisions et appel du Navigator.
     
-    if (enemy.state == State::Dead)return;
-    
+      
     if (enemy.state == State::Waiting) enemy.state = State::Idle;
     
     if (enemy.hp <= 0)
     {
         enemy.state = State::Dead;
         enemy.navigator.Invalidate();
-        return;
     }
     
     elapsed = std::max(0.0, elapsed-dt);
@@ -118,6 +116,7 @@ namespace cpe {
             enemy.state = State::Chase;
         break;
     case State::Dead:
+        enemy.deathDuration = std::max(0.0, enemy.deathDuration-dt);
         break;
     }
     
