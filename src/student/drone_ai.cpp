@@ -29,7 +29,7 @@ namespace cpe
                 }
                 else
                 {
-                    for (auto enemy : enemies)
+                    for (auto& enemy : enemies)
                     {
                         if (Distance(drone.position, enemy.position) <= drone.explosionRadius)
                         {
@@ -46,6 +46,7 @@ namespace cpe
             }
         case DroneState::Exploded:
             {
+                drone.deathDuration = std::max(0.0, drone.deathDuration - dt); 
                 break;
             }
         }
