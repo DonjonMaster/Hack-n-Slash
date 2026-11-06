@@ -35,7 +35,8 @@ std::size_t Simulation::RequestCount() const {
     return count;
 }
 
-void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
+void Simulation::Update(Vec2 movement, bool actionPressed, double dt)
+{
     if (!std::isfinite(dt) || dt <= 0) return;
     dt = std::min(dt, 0.05);
     elapsed += dt;

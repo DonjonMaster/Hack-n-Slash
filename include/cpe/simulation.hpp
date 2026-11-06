@@ -5,12 +5,15 @@
 
 
 namespace cpe {
+    
+   
     struct Player
     {
         Vec2 position;
         Vec2 facing{0, -1};
         int hp = 2000;
         double attackCooldown = 1.0;
+        double attackCooldownMax = 1.0;
         Vec2 target = {0,0};
     };
 
@@ -45,7 +48,6 @@ struct Navigator {
     {
     public:
         DroneState state = DroneState::Moving;
-        Vec2 position;
         Vec2 target;
         double movingDuration = 2.0, explosionDuration = 2.0, deathDuration = 2.0;
         double explosionRadius = 1.50;

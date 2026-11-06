@@ -29,7 +29,7 @@ namespace cpe
                 }
                 else
                 {
-                    for (auto enemy : enemies)
+                    for (auto& enemy : enemies)
                     {
                         if (Distance(drone.position, enemy.position) <= drone.explosionRadius)
                         {
