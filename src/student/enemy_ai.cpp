@@ -10,7 +10,7 @@ namespace cpe {
         if (i != projectiles.end())
         {
             // TODO : Remplacer par un TakeDamage()
-            player.hp = std::max(0, player.hp - projectile.damage);
+            player.TakeDamage(projectile.damage, dt, Poisonned);
             projectiles.erase(i);
         }
         
@@ -92,12 +92,13 @@ namespace cpe {
     case State::Windup:
         if (elapsed <= 0)
         {
-            if (distance <= enemy.attackRange && level.navmesh.SegmentInside(enemy.position, player.position))
+            if (enemy.kind == EnemyKind::Archer)
             {
-                if (enemy.kind == EnemyKind::Archer)
-                    projectiles.push_back(enemy.UseBow(player.position));
-                else
-                    player.hp = std::max(0, player.hp - enemy.damage);
+                projectiles.push_back(enemy.UseBow(player.position));
+            }
+            else if (distance <= enemy.attackRange && level.navmesh.SegmentInside(enemy.position, player.position))
+            {
+                player.hp = std::max(0, player.hp - enemy.damage);
             }
             enemy.state = State::Recover;
             elapsed = enemy.recoverDuration;

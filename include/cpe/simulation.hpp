@@ -1,20 +1,40 @@
 #pragma once
 #include "level.hpp"
 #include <cstddef>
+#include <map>
 #include <raylib.h>
 
 
 namespace cpe {
+    enum Effects {None, Fire, Poisonned};
     
-   
-    struct Player
+    class StatusEffect
     {
+    public:
+        std::map<Effects, bool> conditions {{Fire, false}, {Poisonned, false}};
+        void ApplyStatus(Effects effect);
+        void ApplyEffect(int& hp, double dt);
+        // Fire
+        int fireDamage = 3;
+        double fireTimer = 4;
+        int fireCount = 4;
+        // Poison
+        int poisonDamage = 2;
+        double poisonTimer = 5;
+        int poisonCount = 5;
+    };   
+
+    class Player
+    {
+    public:
+        StatusEffect statusEffect;
         Vec2 position;
         Vec2 facing{0, -1};
         int hp = 2000;
         double attackCooldown = 1.0;
         double attackCooldownMax = 1.0;
         Vec2 target = {0,0};
+        void TakeDamage(int damage, double dt, Effects effect);
     };
 
 // Ce composant expose les données au debug ; le suivi est à implémenter.

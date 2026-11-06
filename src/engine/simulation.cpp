@@ -7,6 +7,11 @@ Simulation::Simulation(Level source) : level(std::move(source)) { Reset(); }
 void Simulation::Reset() {
     player = Player{};
     player.position = level.playerSpawn;
+    for (auto& x : player.statusEffect.conditions)
+    {
+        x.second = false;
+    }
+    player.statusEffect.conditions[None] = true;
     enemies.clear();
     elapsed = 0;
     for (const auto& spawn : level.spawns) {
