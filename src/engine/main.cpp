@@ -259,6 +259,10 @@ int main(int argc, char** argv)
                     DrawCircle3D(World(drone.position, .08f),drone.explosionRadius,{1, 0, 0}, 90,RED);
                 }
             }
+            for (auto& projectile : sim->projectiles)
+            {
+                DrawCube(World(projectile.position, .08f), 0.5f, 2.5f, 1.0f, ORANGE);
+            }
             if (hasProbe)
             {
                 DrawSphere(World(probeGoal, .2f), .12f, probe.search.status == cpe::Status::Found ? SKYBLUE : ORANGE);
