@@ -46,6 +46,7 @@ namespace cpe
             }
         case DroneState::Exploded:
             {
+                drone.deathDuration = std::max(0.0, drone.deathDuration - dt); 
                 break;
             }
         }
