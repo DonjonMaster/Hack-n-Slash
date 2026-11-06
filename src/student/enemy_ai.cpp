@@ -98,7 +98,10 @@ namespace cpe {
             }
             else if (distance <= enemy.attackRange && level.navmesh.SegmentInside(enemy.position, player.position))
             {
-                player.hp = std::max(0, player.hp - enemy.damage);
+                if (enemy.kind == EnemyKind::Light)
+                    player.TakeDamage(enemy.damage, dt, None);
+                else if (enemy.kind == EnemyKind::Heavy)
+                    player.TakeDamage(enemy.damage, dt, Fire);
             }
             enemy.state = State::Recover;
             elapsed = enemy.recoverDuration;

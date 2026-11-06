@@ -16,11 +16,11 @@ namespace cpe {
         void ApplyEffect(int& hp, double dt);
         // Fire
         int fireDamage = 3;
-        double fireTimer = 4;
+        double fireTimer = 1.2;
         int fireCount = 4;
         // Poison
         int poisonDamage = 2;
-        double poisonTimer = 5;
+        double poisonTimer = 1;
         int poisonCount = 5;
     };   
 

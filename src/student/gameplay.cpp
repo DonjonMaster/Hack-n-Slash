@@ -1,6 +1,8 @@
 #include "cpe/simulation.hpp"
-namespace cpe {
-    bool Simulation::MouseGround(Camera3D camera, cpe::Vec2& result)
+
+namespace cpe
+{
+    bool Simulation::MouseGround(Camera3D camera, Vec2& result)
     {
         Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
         if (std::abs(ray.direction.y) < 1e-6f) return false;
@@ -9,8 +11,9 @@ namespace cpe {
         result = {ray.position.x + ray.direction.x * t, ray.position.z + ray.direction.z * t};
         return true;
     }
-    
-    void Simulation::UpdateGameplay(bool actionPressed, double dt) {
+
+    void Simulation::UpdateGameplay(bool actionPressed, double dt)
+    {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
             MouseGround(*camera, player.target);
@@ -29,46 +32,44 @@ namespace cpe {
         }
         player.statusEffect.ApplyEffect(player.hp, dt);
     }
-    
+
     void Player::TakeDamage(int damage, double dt, Effects effect)
     {
-        hp = std::max(0, hp-damage);
+        hp = std::max(0, hp - damage);
         statusEffect.ApplyStatus(effect);
     }
-    
+
     void StatusEffect::ApplyStatus(Effects effect)
     {
         if (effect == Fire)
         {
             conditions[None] = false;
             conditions[effect] = true;
-            fireTimer = 4;
+            fireTimer = 1.2;
             fireCount = 4;
         }
         else if (effect == Poisonned)
         {
             conditions[None] = false;
             conditions[effect] = true;
-            poisonTimer = 5;
+            poisonTimer = 1;
             poisonCount = 5;
         }
     }
-    
+
     void StatusEffect::ApplyEffect(int& hp, double dt)
     {
         if (conditions[None])
             return;
-        
-        if (fireTimer <= 0 || poisonTimer <= 0)
+
+        if (fireTimer <= 0 && conditions[Fire])
         {
-            // Fire Effect
-            if (conditions[Fire])
             {
                 if (fireCount >= 1)
                 {
-                    hp = std::max(0,  hp - fireDamage);
+                    hp = std::max(0, hp - fireDamage);
                     --fireCount;
-                    fireTimer = 4;
+                    fireTimer = 1.2;
                 }
                 else
                 {
@@ -76,6 +77,9 @@ namespace cpe {
                     conditions[None] = true;
                 }
             }
+        }
+        else if (poisonTimer <= 0 && conditions[Poisonned])
+        {
             // Poison Effect
             if (conditions[Poisonned])
             {
@@ -83,7 +87,7 @@ namespace cpe {
                 {
                     hp = std::max(0, hp - poisonDamage);
                     --poisonCount;
-                    poisonTimer = 5;
+                    poisonTimer = 1;
                 }
                 else
                 {
@@ -92,11 +96,7 @@ namespace cpe {
                 }
             }
         }
-        else
-        {
-            fireTimer -= dt;
-            poisonTimer -= dt;
-        }
-        
+        fireTimer -= dt;
+        poisonTimer -= dt;
     }
 }

@@ -203,7 +203,17 @@ int main(int argc, char** argv)
                               Color{118, 140, 170, 255});
             }
             float radius = float(sim->level.agentRadius);
-            DrawCylinder(World(sim->player.position, 0), radius, radius, .7f, 12,GREEN);
+            Color playerColor;
+            if (sim->player.statusEffect.conditions[cpe::Poisonned] && sim->player.statusEffect.conditions[cpe::Fire])
+                playerColor = MAROON;
+            else if (sim->player.statusEffect.conditions[cpe::Poisonned])
+                playerColor = DARKGREEN;
+            else if (sim->player.statusEffect.conditions[cpe::Fire])
+                playerColor = YELLOW;
+            else
+                playerColor = GREEN;
+            
+            DrawCylinder(World(sim->player.position, 0), radius, radius, .7f, 12,playerColor);
             DrawLine3D(World(sim->player.position, .8f),
                        World(sim->player.position + sim->player.facing * .7, .8f),WHITE);
             for (int i = 0; i < static_cast<int>(sim->enemies.size()); ++i)
