@@ -4,13 +4,21 @@ namespace cpe {
     void Simulation::UpdateProjectiles(Projectile& projectile, double dt)
     {
         projectile.position = projectile.position + (projectile.direction * (projectile.speed * dt));
-
-        for (auto it = projectiles.begin(); it != projectiles.end();)
+        
+        auto i = std::find_if(projectiles.begin(), projectiles.end(), 
+            [this](const Projectile& projectile){return Distance(player.position, projectile.position) <= 1 - level.agentRadius;});
+        if (i != projectiles.end())
         {
-            if (level.navmesh.Locate(projectile.position) == -1)
-                it = projectiles.erase(it);
-            else
-                ++it;
+            // TODO : Remplacer par un TakeDamage()
+            player.hp = std::max(0, player.hp - projectile.damage);
+            projectiles.erase(i);
+        }
+        
+        auto it = std::find_if(projectiles.begin(), projectiles.end(), 
+            [this](const Projectile& projectile){return level.navmesh.Locate(projectile.position) == -1;});
+        if (it != projectiles.end())
+        {
+            projectiles.erase(it);
         }
     }
     
@@ -20,6 +28,7 @@ namespace cpe {
         auto distance = Distance(target, position);
         projectile.direction = (target - position) * (1/distance);
         projectile.position = position;
+        projectile.damage = damage;
         return projectile;
     }
 
