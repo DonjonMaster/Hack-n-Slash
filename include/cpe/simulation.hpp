@@ -58,7 +58,7 @@ struct Navigator {
     public:
         Vec2 position;
         float speed = 2.0;
-        int damage = 2;
+        int damage = 20;
         Navigator navigator;
         StateType state;
     };
