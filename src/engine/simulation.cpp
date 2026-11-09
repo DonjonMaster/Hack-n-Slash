@@ -10,6 +10,7 @@ namespace cpe
     void EnemyWave::Update(double dt)
     {
         elapsed += dt;
+        if (waves.empty())return;
         if (enemySpawned < waves[currentWave].size())
         {
             if (elapsed >= cooldown)
