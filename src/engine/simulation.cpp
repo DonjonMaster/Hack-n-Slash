@@ -104,6 +104,11 @@ namespace cpe
             InitAudioDevice();
         if (!IsSoundValid(player.playerHitSound))
             player.playerHitSound = LoadSound("data/SoundEffects/playerHitSound.mp3");
+        if (!IsSoundValid(player.enemyHitSound))
+            player.enemyHitSound = LoadSound("data/SoundEffects/enemyHitSound.mp3");
+        if (!IsSoundValid(player.deathSound))
+            player.deathSound = LoadSound("data/SoundEffects/deathSound.mp3");
+        
     }
 
     void Simulation::Update(Vec2 movement, bool actionPressed, double dt)

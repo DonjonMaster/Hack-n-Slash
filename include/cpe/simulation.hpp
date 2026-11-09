@@ -38,7 +38,8 @@ namespace cpe {
         
         // Audio
         Sound playerHitSound;
-
+        Sound enemyHitSound;
+        Sound deathSound;
     };
 
 // Ce composant expose les données au debug ; le suivi est à implémenter.
