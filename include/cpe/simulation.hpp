@@ -30,7 +30,7 @@ namespace cpe {
         StatusEffect statusEffect;
         Vec2 position;
         Vec2 facing{0, -1};
-        int hp = 2000;
+        int hp = 1;
         double attackCooldown = 1.0;
         double attackCooldownMax = 1.0;
         Vec2 target = {0,0};
@@ -118,6 +118,7 @@ public:
         void Update(double dt);
         double elapsed = 0;
         double cooldown = 1.0;
+        bool IsVictory = false;
         
     };
 class Simulation {
