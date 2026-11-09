@@ -10,7 +10,6 @@ namespace fs = std::filesystem;
 using cpe::Vec2;
 
 
-
 static Vector3 World(Vec2 p, float y = .04f)
 {
     return {static_cast<float>(p.x), y, static_cast<float>(p.z)};
@@ -63,7 +62,6 @@ static fs::path FindData(const char* executable, const fs::path& overrideDir)
 }
 
 
-
 int main(int argc, char** argv)
 {
     SetRandomSeed(time(NULL));
@@ -103,6 +101,7 @@ int main(int argc, char** argv)
         camera.fovy = 20;
         camera.projection = CAMERA_ORTHOGRAPHIC;
         sim->camera = &camera;
+        sim->wave.IsVictory = true;
         while (!WindowShouldClose())
         {
             double frame = std::min(static_cast<double>(GetFrameTime()), .1);
@@ -213,14 +212,14 @@ int main(int argc, char** argv)
                 playerColor = YELLOW;
             else
                 playerColor = GREEN;
-            
-            DrawCylinder(World(sim->player.position, 0), radius, radius, .7f, 12,playerColor);
+
+            DrawCylinder(World(sim->player.position, 0), radius, radius, .7f, 12, playerColor);
             DrawLine3D(World(sim->player.position, .8f),
                        World(sim->player.position + sim->player.facing * .7, .8f),WHITE);
             for (int i = 0; i < static_cast<int>(sim->enemies.size()); ++i)
             {
                 const auto& e = sim->enemies[i];
-                
+
                 Color enemyColor;
                 float height = 0.58f;
                 int sides = 10;
@@ -250,7 +249,7 @@ int main(int argc, char** argv)
                     }
                 }
                 DrawCylinder(World(e.position, 0), radius, radius, height, sides, enemyColor);
-                
+
                 if (i == selected) DrawCircle3D(World(e.position, .08f), radius + .15f, {1, 0, 0}, 90,YELLOW);
                 if (showPaths && i == selected) DrawPath(e.navigator.path,MAGENTA);
             }
@@ -259,15 +258,18 @@ int main(int argc, char** argv)
                 Color droneColor;
                 switch (drone.state)
                 {
-                    default: droneColor = SKYBLUE; break;
-                    case cpe::DroneState::Exploded: droneColor = BLACK; break;
-                    case cpe::DroneState::Exploding: droneColor = RED; break;
+                default: droneColor = SKYBLUE;
+                    break;
+                case cpe::DroneState::Exploded: droneColor = BLACK;
+                    break;
+                case cpe::DroneState::Exploding: droneColor = RED;
+                    break;
                 }
-                DrawCube(World(drone.position, .0f), 0.25,0.25,0.25,droneColor);
-                
+                DrawCube(World(drone.position, .0f), 0.25, 0.25, 0.25, droneColor);
+
                 if (drone.state == cpe::DroneState::Exploding)
                 {
-                    DrawCircle3D(World(drone.position, .08f),drone.explosionRadius,{1, 0, 0}, 90,RED);
+                    DrawCircle3D(World(drone.position, .08f), drone.explosionRadius, {1, 0, 0}, 90,RED);
                 }
             }
             for (auto& projectile : sim->projectiles)
@@ -300,8 +302,35 @@ int main(int argc, char** argv)
                 DrawRectangle(12, GetScreenHeight() - 48, GetScreenWidth() - 24, 36, Fade(BLACK, .8f));
                 DrawText("ZQSD / WASD / fleches : bouger | Clic gauche : requete | Espace : point d'extension gameplay",
                          25, GetScreenHeight() - 39, 16,WHITE);
+                DrawFPS(GetScreenWidth()-90, GetScreenHeight()-39);
             }
-            if (paused) DrawText("PAUSE", GetScreenWidth() / 2 - 55, 170, 32,YELLOW);
+            if (paused && !sim->wave.IsVictory) DrawText("PAUSE", GetScreenWidth() / 2 - 55, 170, 32,YELLOW);
+            if (sim->wave.IsVictory)
+            {
+                paused = true;
+                DrawText("Victoire !", GetScreenWidth() / 2 - 150, 135,64, YELLOW);
+                
+                DrawRectangle(GetScreenWidth() / 3 - 250, 500, 150, 73, WHITE);
+                DrawRectangle( 2 * GetScreenWidth() / 3 + 50, 500, 150, 73, WHITE);
+                
+                DrawText("Rejouer", GetScreenWidth() / 3 - 235, 500 + 15, 32, BLACK);
+                DrawText("Quitter", 2 * GetScreenWidth() / 3 + 65, 500 + 15, 32, BLACK);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                {
+                    if (GetMouseX() >= GetScreenWidth() / 3 - 250 && GetMouseX() < GetScreenWidth() / 3 - 100 && GetMouseY() >= 500 && GetMouseY() < 573)
+                    {
+                        sim->wave.IsVictory = false;
+                        paused = false;
+                        sim->Reset();
+                        selected = 0;
+                        hasProbe = false;
+                    }
+                    else if (GetMouseX() >= 2 * GetScreenWidth() / 3 + 50 && GetMouseX() < 2 * GetScreenWidth() / 3 + 200 && GetMouseY() >= 500 && GetMouseY() < 573)
+                    {
+                        CloseWindow();
+                    }
+                }
+            }
             EndDrawing();
             if (smoke && ++frames >= 90) break;
         }

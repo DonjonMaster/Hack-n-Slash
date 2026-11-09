@@ -10,7 +10,7 @@ namespace cpe
     void EnemyWave::Update(double dt)
     {
         elapsed += dt;
-        if (enemySpawned != waves[currentWave].size())
+        if (enemySpawned < waves[currentWave].size())
         {
             if (elapsed >= cooldown)
             {
@@ -24,11 +24,11 @@ namespace cpe
             currentWave++;
             if (currentWave >= waves.size())
             {
-                //Victory()
+                IsVictory = true;
             }
             else
             {
-                *currentEnemies = waves[currentWave];
+                enemySpawned = 0;
             }
         }
     }
@@ -45,6 +45,7 @@ namespace cpe
         }
         player.statusEffect.conditions[None] = true;
         enemies.clear();
+        wave.waves.clear();
         elapsed = 0;
         for (const auto& spawn : level.spawns)
         {

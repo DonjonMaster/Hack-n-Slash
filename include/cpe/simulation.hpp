@@ -113,6 +113,7 @@ public:
         void Update(double dt);
         double elapsed = 0;
         double cooldown = 1.0;
+        bool IsVictory = false;
         
     };
 class Simulation {
