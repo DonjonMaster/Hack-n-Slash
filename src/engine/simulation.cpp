@@ -115,14 +115,14 @@ namespace cpe
         for (auto& drone : drones) UpdateDrone(drone, dt);
         for (auto& projectile : projectiles) UpdateProjectiles(projectile, dt);
 
-        auto it = std::find_if(drones.begin(), drones.end(), [](Drone& drone) { return drone.deathDuration == 0; });
+        auto it = std::find_if(drones.begin(), drones.end(), [](Drone& drone) { return drone.deathDuration == 0 && drone.state == DroneState::Exploded; });
         if (it != drones.end())
             drones.erase(it);
         
-        auto enemyIt = std::find_if(enemies.begin(),enemies.end(),[](Enemy& enemy){return enemy.deathDuration == 0; });
+        auto enemyIt = std::find_if(enemies.begin(),enemies.end(),[](Enemy& enemy){return enemy.deathDuration == 0 && enemy.state == State::Dead; });
         if (enemyIt != enemies.end())
         {
-            enemies.erase(enemyIt);
+            enemies.erase(enemyIt); 
         }
         
         wave.Update(dt);
