@@ -93,6 +93,8 @@ namespace cpe
             }
             wave.waves.push_back(enemyWave);
         }
+        drones.clear();
+        projectiles.clear();
         // Audio
         InitAudio();
 }
