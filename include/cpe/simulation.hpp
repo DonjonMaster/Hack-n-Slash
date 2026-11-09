@@ -68,13 +68,13 @@ struct Navigator {
         StateType state;
     };
     
-    enum class DroneState { Moving, Exploding, Exploded };
+    enum class DroneState { Moving, Exploding, Exploded, Death };
     class Drone : public Agent<DroneState>
     {
     public:
         DroneState state = DroneState::Moving;
         Vec2 target;
-        double movingDuration = 2.0, explosionDuration = 2.0, deathDuration = 2.0;
+        double movingDuration = 2.0, explosionDuration = 2.0, exploseDuration = 0.5, deathDuration = 2.0;
         double explosionRadius = 1.50;
     };
     
