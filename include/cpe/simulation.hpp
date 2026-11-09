@@ -102,14 +102,18 @@ public:
     Projectile UseBow(Vec2 target);
 };
     
-    class Wave
+    class EnemyWave
     {
     public:
-        Wave(std::vector<Enemy>* enemies);
+        EnemyWave(std::vector<Enemy>* enemies);
         std::vector<std::vector<Enemy>>waves;
         std::vector<Enemy>* currentEnemies = nullptr;
+        int enemySpawned = 0;
         int currentWave = 0;
         void Update(double dt);
+        double elapsed = 0;
+        double cooldown = 1.0;
+        
     };
 class Simulation {
 public:
@@ -122,7 +126,7 @@ public:
     Algorithm algorithm = Algorithm::AStar;
     double elapsed = 0;
     Camera3D* camera;
-    Wave wave;
+    EnemyWave wave;
 
     // Fourni : déplacement, collisions, boucle et appels des points d'extension.
     void Update(Vec2 movement, bool actionPressed, double dt);

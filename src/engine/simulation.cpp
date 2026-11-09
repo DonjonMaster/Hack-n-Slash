@@ -3,12 +3,22 @@
 
 namespace cpe
 {
-    Wave::Wave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
+    EnemyWave::EnemyWave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
     {
     }
 
-    void Wave::Update(double dt)
+    void EnemyWave::Update(double dt)
     {
+        elapsed += dt;
+        if (enemySpawned != waves[currentWave].size())
+        {
+            if (elapsed >= cooldown)
+            {
+                elapsed = 0.0;
+                currentEnemies->push_back(waves[currentWave][enemySpawned]);
+                enemySpawned++;
+            }
+        }
         if (currentEnemies->empty())
         {
             currentWave++;
@@ -67,7 +77,7 @@ namespace cpe
                         static_cast<double>(GetRandomValue(level.bounds.min.z, level.bounds.max.z))
                     };
                 }
-
+                
                 enemy.kind = spawn.kind;
                 if (enemy.kind == EnemyKind::Light)
                     SetLightEnemy(enemy);
@@ -77,41 +87,34 @@ namespace cpe
                     SetArcherEnemy(enemy);
                 enemy.patrol = spawn.patrol;
                 enemyWave.push_back(enemy);
+                
             }
             wave.waves.push_back(enemyWave);
         }
-        for (auto& enemy : wave.waves[wave.currentWave])
-        {
-            enemies.push_back(enemy);
-        }
+}
+
+void Simulation::SetAlgorithm(Algorithm value) {
+    algorithm = value;
+    for (auto& enemy : enemies) enemy.navigator.Invalidate();
+}
+
+std::size_t Simulation::RequestCount() const {
+    std::size_t count = 0;
+    for (const auto& enemy : enemies) count += enemy.navigator.requests;
+    return count;
+}
+
+void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
+    if (!std::isfinite(dt) || dt <= 0) return;
+    dt = std::min(dt, 0.05);
+    elapsed += dt;
+
+    if (Finite(movement) && Length(movement) > 1e-8) {
+        Vec2 direction = Normalized(movement);
+        player.facing = direction;
+        player.position = level.MoveSliding(
+            player.position, direction * (3.5 * dt), level.agentRadius);
     }
-
-    void Simulation::SetAlgorithm(Algorithm value)
-    {
-        algorithm = value;
-        for (auto& enemy : enemies) enemy.navigator.Invalidate();
-    }
-
-    std::size_t Simulation::RequestCount() const
-    {
-        std::size_t count = 0;
-        for (const auto& enemy : enemies) count += enemy.navigator.requests;
-        return count;
-    }
-
-    void Simulation::Update(Vec2 movement, bool actionPressed, double dt)
-    {
-        if (!std::isfinite(dt) || dt <= 0) return;
-        dt = std::min(dt, 0.05);
-        elapsed += dt;
-
-        if (Finite(movement) && Length(movement) > 1e-8)
-        {
-            Vec2 direction = Normalized(movement);
-            player.facing = direction;
-            player.position = level.MoveSliding(
-                player.position, direction * (3.5 * dt), level.agentRadius);
-        }
 
         UpdateGameplay(actionPressed, dt);
         for (auto& enemy : enemies)
@@ -135,42 +138,42 @@ namespace cpe
         wave.Update(dt);
     }
 
-    void Simulation::SetLightEnemy(Enemy& enemy)
-    {
-        enemy.hp = 20;
-        enemy.damage = 5;
-        enemy.speed = 3.0f;
-        enemy.attackRange = 1.0f;
-        enemy.windupDuration = 1.5f;
-        enemy.recoverDuration = 0.8f;
+void Simulation::SetLightEnemy(Enemy& enemy)
+{
+    enemy.hp = 20;
+    enemy.damage = 5;
+    enemy.speed = 3.0f;
+    enemy.attackRange = 1.0f;
+    enemy.windupDuration = 1.5f;
+    enemy.recoverDuration = 0.8f;
+    
+    enemy.detectRange = 2.5f;
+    enemy.loseRange = 5.0f;
+}
 
-        enemy.detectRange = 2.5f;
-        enemy.loseRange = 5.0f;
-    }
+void Simulation::SetHeavyEnemy(Enemy& enemy)
+{
+    enemy.hp = 60;
+    enemy.damage = 10;
+    enemy.speed = 1.5f;
+    enemy.attackRange = 1.5f;
+    enemy.windupDuration = 2.25f;
+    enemy.recoverDuration = 1.5f;
+    
+    enemy.detectRange = 3.0f;
+    enemy.loseRange = 5.0f;
+}
 
-    void Simulation::SetHeavyEnemy(Enemy& enemy)
-    {
-        enemy.hp = 60;
-        enemy.damage = 10;
-        enemy.speed = 1.5f;
-        enemy.attackRange = 1.5f;
-        enemy.windupDuration = 2.25f;
-        enemy.recoverDuration = 1.5f;
-
-        enemy.detectRange = 3.0f;
-        enemy.loseRange = 5.0f;
-    }
-
-    void Simulation::SetArcherEnemy(Enemy& enemy)
-    {
-        enemy.hp = 10;
-        enemy.damage = 5;
-        enemy.speed = 2.0f;
-        enemy.attackRange = 5.0f;
-        enemy.windupDuration = 1.5f;
-        enemy.recoverDuration = 1.5f;
-
-        enemy.detectRange = 8.0f;
-        enemy.loseRange = 10.0f;
-    }
+void Simulation::SetArcherEnemy(Enemy& enemy)
+{
+    enemy.hp = 10;
+    enemy.damage = 5;
+    enemy.speed = 2.0f;
+    enemy.attackRange = 5.0f;
+    enemy.windupDuration = 1.5f;
+    enemy.recoverDuration = 1.5f;
+    
+    enemy.detectRange = 8.0f;
+    enemy.loseRange = 10.0f;
+}
 }
