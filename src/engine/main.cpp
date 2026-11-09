@@ -304,11 +304,37 @@ int main(int argc, char** argv)
                          25, GetScreenHeight() - 39, 16,WHITE);
                 DrawFPS(GetScreenWidth()-90, GetScreenHeight()-39);
             }
-            if (paused && !sim->wave.IsVictory) DrawText("PAUSE", GetScreenWidth() / 2 - 55, 170, 32,YELLOW);
+            if (paused && !sim->wave.IsVictory && sim->player.hp != 0) DrawText("PAUSE", GetScreenWidth() / 2 - 55, 170, 32,YELLOW);
             if (sim->wave.IsVictory)
             {
                 paused = true;
                 DrawText("Victoire !", GetScreenWidth() / 2 - 150, 135,64, YELLOW);
+                
+                DrawRectangle(GetScreenWidth() / 3 - 250, 500, 150, 73, WHITE);
+                DrawRectangle( 2 * GetScreenWidth() / 3 + 50, 500, 150, 73, WHITE);
+                
+                DrawText("Rejouer", GetScreenWidth() / 3 - 235, 500 + 15, 32, BLACK);
+                DrawText("Quitter", 2 * GetScreenWidth() / 3 + 65, 500 + 15, 32, BLACK);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                {
+                    if (GetMouseX() >= GetScreenWidth() / 3 - 250 && GetMouseX() < GetScreenWidth() / 3 - 100 && GetMouseY() >= 500 && GetMouseY() < 573)
+                    {
+                        sim->wave.IsVictory = false;
+                        paused = false;
+                        sim->Reset();
+                        selected = 0;
+                        hasProbe = false;
+                    }
+                    else if (GetMouseX() >= 2 * GetScreenWidth() / 3 + 50 && GetMouseX() < 2 * GetScreenWidth() / 3 + 200 && GetMouseY() >= 500 && GetMouseY() < 573)
+                    {
+                        CloseWindow();
+                    }
+                }
+            }
+            if (sim->player.hp == 0)
+            {
+                paused = true;
+                DrawText("Défaite !", GetScreenWidth() / 2 - 150, 135,64, YELLOW);
                 
                 DrawRectangle(GetScreenWidth() / 3 - 250, 500, 150, 73, WHITE);
                 DrawRectangle( 2 * GetScreenWidth() / 3 + 50, 500, 150, 73, WHITE);
