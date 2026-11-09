@@ -3,12 +3,22 @@
 
 namespace cpe
 {
-    Wave::Wave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
+    EnemyWave::EnemyWave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
     {
     }
 
-    void Wave::Update(double dt)
+    void EnemyWave::Update(double dt)
     {
+        elapsed += dt;
+        if (enemySpawned != waves[currentWave].size())
+        {
+            if (elapsed >= cooldown)
+            {
+                elapsed = 0.0;
+                currentEnemies->push_back(waves[currentWave][enemySpawned]);
+                enemySpawned++;
+            }
+        }
         if (currentEnemies->empty())
         {
             currentWave++;
@@ -78,10 +88,6 @@ void Simulation::Reset() {
             }
             wave.waves.push_back(enemyWave);
         }
-        for (auto& enemy : wave.waves[wave.currentWave])
-        {
-            enemies.push_back(enemy);
-        }
 }
 
 void Simulation::SetAlgorithm(Algorithm value) {
@@ -112,10 +118,13 @@ void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
         UpdateEnemy(enemy, dt);
     for (auto& drone : drones) UpdateDrone(drone, dt);
     for (auto& projectile : projectiles) UpdateProjectiles(projectile, dt);
+        wave.Update(dt);
     
     auto it = std::find_if(drones.begin(), drones.end(), [](Drone& drone){return drone.deathDuration == 0;});
     if (it != drones.end())
         drones.erase(it);
+        
+        
 }
 
 void Simulation::SetLightEnemy(Enemy& enemy)
