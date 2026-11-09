@@ -45,7 +45,7 @@ namespace cpe {
         }
         if (enemy.state == State::Dead)
         {
-            enemy.deathDuration = std::max(0.0, enemy.deathDuration - dt);
+            enemy.deathDuration = std::max(0.0, enemy.deathDuration - dt);  
             return;
         }
         //elapsed = std::max(0.0, elapsed - dt);

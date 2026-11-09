@@ -22,7 +22,7 @@ namespace cpe
             }
         }
     }
-
+Simulation::Simulation(Level level) : level(level),wave(&enemies){Reset();}
 void Simulation::Reset() {
     player = Player{};
     player.position = level.playerSpawn;

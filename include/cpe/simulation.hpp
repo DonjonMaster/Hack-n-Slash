@@ -93,7 +93,8 @@ public:
     int hp = 20;
     bool flashing = false;
     double detectRange = 2.0, loseRange=10.0, attackRange=0.65;
-    double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25f, flashingCooldownMax = 0.25f;
+    double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25, deathDuration = 1.5;
+    double windupDurationMax = 1.5, recoverDurationMax = 0.8, flashingCooldownMax = 0.25;
     std::vector<Vec2> patrol;
     int nextPatrolPoint = 0;
     EnemyKind kind = EnemyKind::Light;
