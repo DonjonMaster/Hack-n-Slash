@@ -50,6 +50,33 @@ namespace cpe
                 if (!(in >> result.playerSpawn.x >> result.playerSpawn.z))error("player x z");
                 gotPlayer = true;
             }
+            else if (key == "wave")
+            {
+                std::vector<Spawn> waveSpawn;
+                int nbKinds;
+                if (!(in >> nbKinds))error("invalid wave nbKinds");
+                for (int i = 0; i < nbKinds; i++)
+                {
+                    std::string kind;
+                    int nbEnemy;
+                    if (!(in >> kind >> nbEnemy))error("Kind nbEnemy");
+                    for (int j = 0; j < nbEnemy; j++)
+                    {
+                        Spawn spawn;
+                        Vec2 p = {0,0};
+                        spawn.position = p;
+                        if (kind != "light" && kind != "heavy" && kind != "archer")error("unknown enemy kind");
+                        if (kind == "light")
+                            spawn.kind = EnemyKind::Light;
+                        else if (kind == "heavy")
+                            spawn.kind = EnemyKind::Heavy;
+                        else if (kind == "archer")
+                            spawn.kind = EnemyKind::Archer;
+                        waveSpawn.push_back(spawn);    
+                    }
+                }
+                result.waveSpawn.push_back(waveSpawn);
+            }
             else if (key == "enemy")
             {
                 std::string kind;

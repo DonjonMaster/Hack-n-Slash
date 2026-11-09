@@ -100,6 +100,16 @@ public:
     State state = State::Waiting;
     Projectile UseBow(Vec2 target);
 };
+    
+    class Wave
+    {
+    public:
+        Wave(std::vector<Enemy>* enemies);
+        std::vector<std::vector<Enemy>>waves;
+        std::vector<Enemy>* currentEnemies = nullptr;
+        int currentWave = 0;
+        void Update(double dt);
+    };
 class Simulation {
 public:
     explicit Simulation(Level level);
@@ -111,6 +121,7 @@ public:
     Algorithm algorithm = Algorithm::AStar;
     double elapsed = 0;
     Camera3D* camera;
+    Wave wave;
 
     // Fourni : déplacement, collisions, boucle et appels des points d'extension.
     void Update(Vec2 movement, bool actionPressed, double dt);

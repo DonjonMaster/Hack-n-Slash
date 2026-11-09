@@ -1,8 +1,27 @@
 #include "cpe/simulation.hpp"
 #include <utility>
 
-namespace cpe {
-Simulation::Simulation(Level source) : level(std::move(source)) { Reset(); }
+namespace cpe
+{
+    Wave::Wave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
+    {
+    }
+
+    void Wave::Update(double dt)
+    {
+        if (currentEnemies->empty())
+        {
+            currentWave++;
+            if (currentWave >= waves.size())
+            {
+                //Victory()
+            }
+            else
+            {
+                *currentEnemies = waves[currentWave];
+            }
+        }
+    }
 
 void Simulation::Reset() {
     player = Player{};
@@ -14,19 +33,55 @@ void Simulation::Reset() {
     player.statusEffect.conditions[None] = true;
     enemies.clear();
     elapsed = 0;
-    for (const auto& spawn : level.spawns) {
-        Enemy enemy;
-        enemy.position = spawn.position;
-        enemy.kind = spawn.kind;
-        if (enemy.kind == EnemyKind::Light)
-            SetLightEnemy(enemy);
-        else if (enemy.kind == EnemyKind::Heavy)
-            SetHeavyEnemy(enemy);
-        else if (enemy.kind == EnemyKind::Archer)
-            SetArcherEnemy(enemy);
-        enemy.patrol = spawn.patrol;
-        enemies.push_back(enemy);
-    }
+        for (const auto& spawn : level.spawns)
+        {
+            Enemy enemy;
+            enemy.position = spawn.position;
+            enemy.kind = spawn.kind;
+            if (enemy.kind == EnemyKind::Light)
+                SetLightEnemy(enemy);
+            else if (enemy.kind == EnemyKind::Heavy)
+                SetHeavyEnemy(enemy);
+            else if (enemy.kind == EnemyKind::Archer)
+                SetArcherEnemy(enemy);
+            enemy.patrol = spawn.patrol;
+            enemies.push_back(enemy);
+        }
+        for (const auto& spawnWave : level.waveSpawn)
+        {
+            std::vector<Enemy> enemyWave;
+            for (const auto& spawn : spawnWave)
+            {
+                Enemy enemy;
+                enemy.position = {
+                    static_cast<double>(GetRandomValue(level.bounds.min.x, level.bounds.max.x)),
+                    static_cast<double>(GetRandomValue(level.bounds.min.z, level.bounds.max.z))
+                };
+                while (level.navmesh.Locate(enemy.position) == -1)
+                {
+                    enemy.position = {
+                        static_cast<double>(GetRandomValue(level.bounds.min.x, level.bounds.max.x)),
+                        static_cast<double>(GetRandomValue(level.bounds.min.z, level.bounds.max.z))
+                    };
+                }
+                
+                enemy.kind = spawn.kind;
+                if (enemy.kind == EnemyKind::Light)
+                    SetLightEnemy(enemy);
+                else if (enemy.kind == EnemyKind::Heavy)
+                    SetHeavyEnemy(enemy);
+                else if (enemy.kind == EnemyKind::Archer)
+                    SetArcherEnemy(enemy);
+                enemy.patrol = spawn.patrol;
+                enemyWave.push_back(enemy);
+                
+            }
+            wave.waves.push_back(enemyWave);
+        }
+        for (auto& enemy : wave.waves[wave.currentWave])
+        {
+            enemies.push_back(enemy);
+        }
 }
 
 void Simulation::SetAlgorithm(Algorithm value) {

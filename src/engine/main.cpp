@@ -66,6 +66,7 @@ static fs::path FindData(const char* executable, const fs::path& overrideDir)
 
 int main(int argc, char** argv)
 {
+    SetRandomSeed(time(NULL));
     try
     {
         fs::path dataOverride;
