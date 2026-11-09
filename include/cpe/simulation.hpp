@@ -133,6 +133,7 @@ public:
     void SetLightEnemy(Enemy& enemy);
     void SetHeavyEnemy(Enemy& enemy);
     void SetArcherEnemy(Enemy& enemy);
+    void SetPatrol(Enemy& enemy, std::vector<Vec2>& patrol);
     void Reset();
     void SetAlgorithm(Algorithm value);
     std::size_t RequestCount() const;

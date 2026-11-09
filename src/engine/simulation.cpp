@@ -60,10 +60,10 @@ namespace cpe
             enemy.patrol = spawn.patrol;
             enemies.push_back(enemy);
         }
-        for (const auto& spawnWave : level.waveSpawn)
+        for (auto& spawnWave : level.waveSpawn)
         {
             std::vector<Enemy> enemyWave;
-            for (const auto& spawn : spawnWave)
+            for (auto& spawn : spawnWave)
             {
                 Enemy enemy;
                 enemy.position = {
@@ -85,7 +85,7 @@ namespace cpe
                     SetHeavyEnemy(enemy);
                 else if (enemy.kind == EnemyKind::Archer)
                     SetArcherEnemy(enemy);
-                enemy.patrol = spawn.patrol;
+                SetPatrol(enemy, spawn.patrol);
                 enemyWave.push_back(enemy);
                 
             }
@@ -175,5 +175,30 @@ void Simulation::SetArcherEnemy(Enemy& enemy)
     
     enemy.detectRange = 8.0f;
     enemy.loseRange = 10.0f;
+}
+
+void Simulation::SetPatrol(Enemy& enemy, std::vector<Vec2>& patrol)
+{
+        if (patrol.size() != 0)
+        {
+            enemy.patrol = patrol;
+        }
+        else
+        {
+            if (enemy.kind == EnemyKind::Light)
+            {
+                enemy.patrol.push_back(enemy.position);
+                int region = level.navmesh.Locate(enemy.position);
+                auto node = level.navmesh.GetGraph()[region];
+                for (int i = 0; i < 4; i++)
+                {
+                    int neighbour = node[GetRandomValue(0, node.size() - 1)].to;
+                    Vec2 patrolPos = {static_cast<double>(GetRandomValue(level.bounds.min.x, level.bounds.max.x)),static_cast<double>(GetRandomValue(level.bounds.min.z, level.bounds.max.z))};
+                    while (!level.navmesh.Contains(neighbour, patrolPos))patrolPos = {static_cast<double>(GetRandomValue(level.bounds.min.x, level.bounds.max.x)),static_cast<double>(GetRandomValue(level.bounds.min.z, level.bounds.max.z))};
+                    enemy.patrol.push_back(patrolPos);
+                    node = level.navmesh.GetGraph()[neighbour];
+                }
+            }
+        }
 }
 }
