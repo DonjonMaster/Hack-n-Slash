@@ -101,7 +101,6 @@ int main(int argc, char** argv)
         camera.fovy = 20;
         camera.projection = CAMERA_ORTHOGRAPHIC;
         sim->camera = &camera;
-        sim->wave.IsVictory = true;
         while (!WindowShouldClose())
         {
             double frame = std::min(static_cast<double>(GetFrameTime()), .1);
