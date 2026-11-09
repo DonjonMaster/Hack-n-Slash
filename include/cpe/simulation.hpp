@@ -35,6 +35,10 @@ namespace cpe {
         double attackCooldownMax = 1.0;
         Vec2 target = {0,0};
         void TakeDamage(int damage, double dt, Effects effect);
+        
+        // Audio
+        Sound playerHitSound;
+
     };
 
 // Ce composant expose les données au debug ; le suivi est à implémenter.
@@ -76,7 +80,7 @@ struct Navigator {
     class Projectile
     {
     public:
-        float speed = 2.0f;
+        float speed = 4.0f;
         int damage = 1.0f;
         Vec2 position;
         Vec2 direction;
@@ -102,10 +106,10 @@ public:
     Projectile UseBow(Vec2 target);
 };
     
-    class Wave
+    class EnnemyWave
     {
     public:
-        Wave(std::vector<Enemy>* enemies);
+        EnnemyWave(std::vector<Enemy>* enemies);
         std::vector<std::vector<Enemy>>waves;
         std::vector<Enemy>* currentEnemies = nullptr;
         int currentWave = 0;
@@ -122,7 +126,11 @@ public:
     Algorithm algorithm = Algorithm::AStar;
     double elapsed = 0;
     Camera3D* camera;
-    Wave wave;
+    EnnemyWave wave;
+    
+    
+    // Audio
+    void InitAudio();
 
     // Fourni : déplacement, collisions, boucle et appels des points d'extension.
     void Update(Vec2 movement, bool actionPressed, double dt);

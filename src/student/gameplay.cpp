@@ -37,6 +37,9 @@ namespace cpe
     {
         hp = std::max(0, hp - damage);
         statusEffect.ApplyStatus(effect);
+        // Audio
+        if (IsAudioDeviceReady())
+            PlaySound(playerHitSound);
     }
 
     void StatusEffect::ApplyStatus(Effects effect)

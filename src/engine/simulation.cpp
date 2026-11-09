@@ -3,11 +3,11 @@
 
 namespace cpe
 {
-    Wave::Wave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
+    EnnemyWave::EnnemyWave(std::vector<Enemy>* enemies) : currentEnemies(enemies)
     {
     }
 
-    void Wave::Update(double dt)
+    void EnnemyWave::Update(double dt)
     {
         if (currentEnemies->empty())
         {
@@ -80,10 +80,9 @@ namespace cpe
             }
             wave.waves.push_back(enemyWave);
         }
-        for (auto& enemy : wave.waves[wave.currentWave])
-        {
-            enemies.push_back(enemy);
-        }
+        
+        // Audio
+        InitAudio();
     }
 
     void Simulation::SetAlgorithm(Algorithm value)
@@ -97,6 +96,14 @@ namespace cpe
         std::size_t count = 0;
         for (const auto& enemy : enemies) count += enemy.navigator.requests;
         return count;
+    }
+
+    void Simulation::InitAudio()
+    {
+        if (!IsAudioDeviceReady())
+            InitAudioDevice();
+        if (!IsSoundValid(player.playerHitSound))
+            player.playerHitSound = LoadSound("data/SoundEffects/playerHitSound.mp3");
     }
 
     void Simulation::Update(Vec2 movement, bool actionPressed, double dt)
