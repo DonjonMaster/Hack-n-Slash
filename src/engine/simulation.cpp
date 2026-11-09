@@ -91,7 +91,10 @@ namespace cpe
             }
             wave.waves.push_back(enemyWave);
         }
+        // Audio
+        InitAudio();
 }
+        
 
 void Simulation::SetAlgorithm(Algorithm value) {
     algorithm = value;
@@ -104,10 +107,24 @@ std::size_t Simulation::RequestCount() const {
     return count;
 }
 
-void Simulation::Update(Vec2 movement, bool actionPressed, double dt) {
-    if (!std::isfinite(dt) || dt <= 0) return;
-    dt = std::min(dt, 0.05);
-    elapsed += dt;
+    void Simulation::InitAudio()
+    {
+        if (!IsAudioDeviceReady())
+            InitAudioDevice();
+        if (!IsSoundValid(player.playerHitSound))
+            player.playerHitSound = LoadSound("data/SoundEffects/playerHitSound.mp3");
+        if (!IsSoundValid(player.enemyHitSound))
+            player.enemyHitSound = LoadSound("data/SoundEffects/enemyHitSound.mp3");
+        if (!IsSoundValid(player.deathSound))
+            player.deathSound = LoadSound("data/SoundEffects/deathSound.mp3");
+        
+    }
+
+    void Simulation::Update(Vec2 movement, bool actionPressed, double dt)
+    {
+        if (!std::isfinite(dt) || dt <= 0) return;
+        dt = std::min(dt, 0.05);
+        elapsed += dt;
 
     if (Finite(movement) && Length(movement) > 1e-8) {
         Vec2 direction = Normalized(movement);

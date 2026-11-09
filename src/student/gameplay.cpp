@@ -36,7 +36,17 @@ namespace cpe
     void Player::TakeDamage(int damage, double dt, Effects effect)
     {
         hp = std::max(0, hp - damage);
+        if (hp == 0)
+        {
+            // Death Audio
+            if (IsAudioDeviceReady())
+                PlaySound(deathSound);
+            // Death
+        }
         statusEffect.ApplyStatus(effect);
+        // Audio
+        if (IsAudioDeviceReady())
+            PlaySound(playerHitSound);
     }
 
     void StatusEffect::ApplyStatus(Effects effect)
