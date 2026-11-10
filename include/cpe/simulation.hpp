@@ -13,7 +13,7 @@ namespace cpe {
     public:
         std::map<Effects, bool> conditions {{Fire, false}, {Poisonned, false}};
         void ApplyStatus(Effects effect);
-        void ApplyEffect(int& hp, double dt);
+        void ApplyEffect(double& hp, double dt);
         // Fire
         int fireDamage = 3;
         double fireTimer = 1.2;
@@ -30,7 +30,7 @@ namespace cpe {
         StatusEffect statusEffect;
         Vec2 position;
         Vec2 facing{0, -1};
-        int hp = 100;
+        double hp = 100;
         double hpMax = 100;
         double attackCooldown = 1.0;
         double attackCooldownMax = 1.0;

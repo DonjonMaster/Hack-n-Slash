@@ -35,7 +35,7 @@ namespace cpe
 
     void Player::TakeDamage(int damage, double dt, Effects effect)
     {
-        hp = std::max(0, hp - damage);
+        hp = std::max(0.0, hp - damage);
         if (hp == 0)
         {
             // Death Audio
@@ -67,7 +67,7 @@ namespace cpe
         }
     }
 
-    void StatusEffect::ApplyEffect(int& hp, double dt)
+    void StatusEffect::ApplyEffect(double& hp, double dt)
     {
         if (conditions[None])
             return;
@@ -77,7 +77,7 @@ namespace cpe
             {
                 if (fireCount >= 1)
                 {
-                    hp = std::max(0, hp - fireDamage);
+                    hp = std::max(0.0, hp - fireDamage);
                     --fireCount;
                     fireTimer = 1.2;
                 }
@@ -95,7 +95,7 @@ namespace cpe
             {
                 if (poisonCount >= 1)
                 {
-                    hp = std::max(0, hp - poisonDamage);
+                    hp = std::max(0.0, hp - poisonDamage);
                     --poisonCount;
                     poisonTimer = 1;
                 }

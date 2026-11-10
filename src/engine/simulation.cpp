@@ -1,4 +1,6 @@
 #include "cpe/simulation.hpp"
+
+#include <random>
 #include <utility>
 
 namespace cpe
@@ -47,6 +49,8 @@ namespace cpe
         player.statusEffect.conditions[None] = true;
         enemies.clear();
         wave.waves.clear();
+        wave.currentWave = 0;
+        wave.enemySpawned = 0;
         elapsed = 0;
         for (const auto& spawn : level.spawns)
         {
@@ -91,7 +95,9 @@ namespace cpe
                 enemyWave.push_back(enemy);
                 
             }
-            std::shuffle(enemyWave.begin(), enemyWave.end(),enemyWave);
+            std::random_device rd;
+            std::mt19937 g(rd());
+            std::shuffle(enemyWave.begin(), enemyWave.end(),g); 
             wave.waves.push_back(enemyWave);
         }
         drones.clear();
