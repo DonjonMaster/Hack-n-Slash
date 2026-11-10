@@ -269,7 +269,13 @@ int main(int argc, char** argv)
                 {
                 default: droneColor = SKYBLUE;
                     break;
-                case cpe::DroneState::Exploded: droneColor = BLACK;
+                case cpe::DroneState::Exploded:
+                    {
+                        DrawSphere(World(drone.position, 0.f), drone.explosionRadius,RED);
+                        droneColor = ORANGE;
+                        break;
+                    }
+                case cpe::DroneState::Death: droneColor = BLACK;
                     break;
                 case cpe::DroneState::Exploding: droneColor = RED;
                     break;

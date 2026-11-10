@@ -50,6 +50,15 @@ namespace cpe
             }
         case DroneState::Exploded:
             {
+                if (drone.exploseDuration == 0)
+                    drone.state = DroneState::Death;
+                
+                else
+                drone.exploseDuration = std::max(0.0, drone.exploseDuration - dt);
+                break;
+            }
+        case DroneState::Death:
+            {
                 drone.deathDuration = std::max(0.0, drone.deathDuration - dt); 
                 break;
             }
