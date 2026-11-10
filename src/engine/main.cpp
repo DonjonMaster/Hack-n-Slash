@@ -84,12 +84,16 @@ int main(int argc, char** argv)
             else throw std::runtime_error("Unknown or incomplete option: " + arg);
         }
         const fs::path data = FindData(argv[0], dataOverride);
-        auto sim = std::make_unique<cpe::Simulation>(cpe::Level::Load(data / "levels/arena.level"));
 
         bool showSurface = false, showPaths = false, showHud = true, paused = false, actionPending = false;
 #ifndef NDEBUG
+        auto sim = std::make_unique<cpe::Simulation>(cpe::Level::Load(data / "levels/arena.level"));
         showSurface = true, showPaths = true;
+#else
+        auto sim = std::make_unique<cpe::Simulation>(cpe::Level::Load(data / "levels/pillars.level"));
 #endif
+
+
         bool hasProbe = false;
         cpe::Path probe;
         Vec2 probeGoal;
