@@ -20,7 +20,7 @@ namespace cpe
                 enemySpawned++;
             }
         }
-        if (currentEnemies->empty())
+        if (currentEnemies->empty() && elapsed >= cooldown)
         {
             currentWave++;
             if (currentWave >= waves.size())
@@ -91,6 +91,7 @@ namespace cpe
                 enemyWave.push_back(enemy);
                 
             }
+            std::shuffle(enemyWave.begin(), enemyWave.end(),enemyWave);
             wave.waves.push_back(enemyWave);
         }
         drones.clear();

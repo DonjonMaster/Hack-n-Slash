@@ -5,9 +5,10 @@ radius 0.25
 player -5 0
 wave 2 heavy 1 light 2
 wave 1 archer 1
-enemy light -5 -4 2 -4 -4 -4 -2
-enemy heavy -5 4 0
-enemy light 5 0 0
+wave 3 light 5 heavy 3 archer 2
+# enemy light -5 -4 2 -4 -4 -4 -2
+# enemy heavy -5 4 0
+# enemy light 5 0 0
 wall -1.5 -2 1.5 2 1.5
 # Surfaces sources de visualisation, sans graphe ni adjacences.
 # Ces données ne constituent pas un composant NavMesh implémenté.
