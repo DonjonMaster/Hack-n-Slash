@@ -33,7 +33,7 @@ namespace cpe
                     {
                         if (Distance(drone.position, enemy.position) <= drone.explosionRadius)
                         {
-                            enemy.hp = std::max(0, enemy.hp - drone.damage);
+                            enemy.hp = std::max(0.0, enemy.hp - drone.damage);
                             if (enemy.hp == 0 && enemy.state != State::Dead)
                                 PlaySound(player.deathSound);
                             else if (enemy.hp != 0)

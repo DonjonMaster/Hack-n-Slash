@@ -30,7 +30,8 @@ namespace cpe {
         StatusEffect statusEffect;
         Vec2 position;
         Vec2 facing{0, -1};
-        int hp = 1;
+        int hp = 100;
+        double hpMax = 100;
         double attackCooldown = 1.0;
         double attackCooldownMax = 1.0;
         Vec2 target = {0,0};
@@ -95,7 +96,8 @@ const char* Name(State value);
 // Ajoutez ici les données nécessaires à votre propre IA et votre combat.
 class Enemy : public Agent<State> {
 public:
-    int hp = 20;
+    double hp = 20;
+    double hpMax = 20;
     bool flashing = false;
     double detectRange = 2.0, loseRange=10.0, attackRange=0.65;
     double windupDuration=1.5, recoverDuration=0.8, flashingCooldown = 0.25, deathDuration = 1.5;

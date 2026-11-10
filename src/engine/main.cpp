@@ -215,6 +215,12 @@ int main(int argc, char** argv)
             DrawCylinder(World(sim->player.position, 0), radius, radius, .7f, 12, playerColor);
             DrawLine3D(World(sim->player.position, .8f),
                        World(sim->player.position + sim->player.facing * .7, .8f),WHITE);
+            
+            double playerHealth = sim->player.hp/sim->player.hpMax;
+            
+            DrawCylinderEx(World({sim->player.position.x-1, sim->player.position.z}, 1), World({sim->player.position.x+1, sim->player.position.z}, 1), 0.1, 0.1, 10, RED);
+            DrawCylinderEx(World({sim->player.position.x-1, sim->player.position.z}, 1), World({sim->player.position.x-1+(playerHealth*2), sim->player.position.z}, 1), 0.1, 0.1, 10, GREEN);
+
             for (int i = 0; i < static_cast<int>(sim->enemies.size()); ++i)
             {
                 const auto& e = sim->enemies[i];
@@ -248,6 +254,10 @@ int main(int argc, char** argv)
                     }
                 }
                 DrawCylinder(World(e.position, 0), radius, radius, height, sides, enemyColor);
+                
+                double enemyhealth = e.hp/e.hpMax;
+                DrawCylinderEx(World({e.position.x-1, e.position.z}, 1), World({e.position.x+1, e.position.z}, 1), 0.1, 0.1, 10, RED);
+                DrawCylinderEx(World({e.position.x-1, e.position.z}, 1), World({e.position.x-1+(enemyhealth*2), e.position.z}, 1), 0.1, 0.1, 10, GREEN);
 
                 if (i == selected) DrawCircle3D(World(e.position, .08f), radius + .15f, {1, 0, 0}, 90,YELLOW);
                 if (showPaths && i == selected) DrawPath(e.navigator.path,MAGENTA);

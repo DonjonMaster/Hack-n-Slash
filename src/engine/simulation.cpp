@@ -163,6 +163,7 @@ std::size_t Simulation::RequestCount() const {
 void Simulation::SetLightEnemy(Enemy& enemy)
 {
     enemy.hp = 20;
+    enemy.hpMax = 20;
     enemy.damage = 5;
     enemy.speed = 3.0f;
     enemy.attackRange = 1.0f;
@@ -176,6 +177,7 @@ void Simulation::SetLightEnemy(Enemy& enemy)
 void Simulation::SetHeavyEnemy(Enemy& enemy)
 {
     enemy.hp = 60;
+    enemy.hpMax = 60;
     enemy.damage = 10;
     enemy.speed = 1.5f;
     enemy.attackRange = 1.5f;
@@ -189,6 +191,7 @@ void Simulation::SetHeavyEnemy(Enemy& enemy)
 void Simulation::SetArcherEnemy(Enemy& enemy)
 {
     enemy.hp = 10;
+    enemy.hpMax = 10;
     enemy.damage = 5;
     enemy.speed = 2.0f;
     enemy.attackRange = 5.0f;
