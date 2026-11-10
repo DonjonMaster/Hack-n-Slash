@@ -83,7 +83,7 @@ struct Navigator {
     {
     public:
         float speed = 4.0f;
-        int damage = 1.0f;
+        int damage = 1;
         Vec2 position;
         Vec2 direction;
     };

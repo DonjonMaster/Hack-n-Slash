@@ -236,7 +236,7 @@ int main(int argc, char** argv)
                 {
                     if (e.kind == cpe::EnemyKind::Heavy)
                     {
-                        enemyColor = MAROON;
+                        enemyColor = PURPLE;
                         height = 0.85f;
                         sides = 6;
                     }
