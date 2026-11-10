@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <string>
 
+
+
 namespace fs = std::filesystem;
 using cpe::Vec2;
 
@@ -83,7 +85,11 @@ int main(int argc, char** argv)
         }
         const fs::path data = FindData(argv[0], dataOverride);
         auto sim = std::make_unique<cpe::Simulation>(cpe::Level::Load(data / "levels/arena.level"));
-        bool showSurface = true, showPaths = true, showHud = true, paused = false, actionPending = false;
+
+        bool showSurface = false, showPaths = false, showHud = true, paused = false, actionPending = false;
+#ifndef NDEBUG
+        showSurface = true, showPaths = true;
+#endif
         bool hasProbe = false;
         cpe::Path probe;
         Vec2 probeGoal;
@@ -305,7 +311,7 @@ int main(int argc, char** argv)
                                     sim->level.title.c_str(), cpe::Name(sim->algorithm),
                                     sim->level.navmesh.IsBuilt() ? "Construit" : "A IMPLEMENTER"), 25, 55, 18,
                          LIGHTGRAY);
-                DrawText("Navigation, IA et gameplay : fonctions a completer dans src/student/", 25, 80, 18,YELLOW);
+                DrawText("Navigation, IA et gameplay : fonctions completé", 25, 80, 18,YELLOW);
                 if (hasProbe)
                 {
                     DrawText(TextFormat("Sonde: %s | %d developpes | %.2f us",
@@ -315,7 +321,7 @@ int main(int argc, char** argv)
                 DrawText("F1 surfaces | F2 chemins | F3 HUD | Tab algo | N selection | F5 scene | P pause | R reset",
                          25, 130, 16,GRAY);
                 DrawRectangle(12, GetScreenHeight() - 48, GetScreenWidth() - 24, 36, Fade(BLACK, .8f));
-                DrawText("ZQSD / WASD / fleches : bouger | Clic gauche : requete | Espace : point d'extension gameplay",
+                DrawText("ZQSD / WASD / fleches : bouger | Clic gauche : cible bombe | Espace : bombe roulante",
                          25, GetScreenHeight() - 39, 16,WHITE);
                 DrawFPS(GetScreenWidth()-90, GetScreenHeight()-39);
             }

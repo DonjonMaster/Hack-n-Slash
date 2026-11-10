@@ -3,6 +3,9 @@ title Trois piliers - passages
 bounds -8 -6 8 6
 radius 0.25
 player -6 0
+wave 2 heavy 1 light 2
+wave 1 archer 1
+wave 3 light 5 heavy 3 archer 2
 enemy light -6 -4 0
 enemy heavy 0 4 0
 enemy archer 6 0 0
