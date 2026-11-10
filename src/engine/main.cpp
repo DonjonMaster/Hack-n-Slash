@@ -204,7 +204,7 @@ int main(int argc, char** argv)
             float radius = float(sim->level.agentRadius);
             Color playerColor;
             if (sim->player.statusEffect.conditions[cpe::Poisonned] && sim->player.statusEffect.conditions[cpe::Fire])
-                playerColor = MAROON;
+                playerColor = PURPLE;
             else if (sim->player.statusEffect.conditions[cpe::Poisonned])
                 playerColor = DARKGREEN;
             else if (sim->player.statusEffect.conditions[cpe::Fire])
@@ -236,7 +236,7 @@ int main(int argc, char** argv)
                 {
                     if (e.kind == cpe::EnemyKind::Heavy)
                     {
-                        enemyColor = PURPLE;
+                        enemyColor = MAROON;
                         height = 0.85f;
                         sides = 6;
                     }
